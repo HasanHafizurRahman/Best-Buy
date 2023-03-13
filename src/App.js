@@ -1,10 +1,15 @@
 import "./App.css";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { LoginPage, SignupPage } from "./Routes.js";
 
 function App() {
   return (
-    <div className="App">
-      <h1 class="text-3xl font-bold underline">Hello world!</h1>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/sign-up" element={<SignupPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
