@@ -1,7 +1,10 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { React, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import styles from "../../styles/styles";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { server } from "../../server";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -9,9 +12,28 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    await axios
+      .post(
+        `${server}/user/login-user`,
+        {
+          email,
+          password,
+        },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        toast.success("Login Success!");
+        navigate("/");
+        window.location.reload(true);
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+      });
   };
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -62,7 +84,7 @@ const Login = () => {
                   <AiOutlineEye
                     className="absolute right-2 top-2 cursor-pointer"
                     size={25}
-                    // onClick={() => setVisible(false)}
+                    onClick={() => setVisible(false)}
                   />
                 ) : (
                   <AiOutlineEyeInvisible
@@ -102,7 +124,7 @@ const Login = () => {
                 type="submit"
                 className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
               >
-                Login
+                Submit
               </button>
             </div>
             <div className={`${styles.noramlFlex} w-full`}>
